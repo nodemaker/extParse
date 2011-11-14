@@ -34,7 +34,13 @@
                   ([(NSDictionary*)object objectForKey:kParseObjectClassKey])) {
             
             PFObject* parseObject = [PFObject objectWithParseDictionary:object];
-            [dictionary setObject:[NSObject objectFromParseObject:parseObject] forKey:key];
+            NSObject* newObject = [NSObject objectFromParseObject:parseObject];
+            
+            if(newObject) {
+                [dictionary setObject:newObject forKey:key];
+            } else {
+                [dictionary setObject:[NSDictionary dictionaryWithParseObjectDictionary:object] forKey:key];
+            }
             
         } else if([object isKindOfClass:[NSDictionary class]]||
                   [object isKindOfClass:[NSMutableDictionary class]]) {
@@ -45,7 +51,7 @@
             [dictionary setObject:[NSObject objectFromParseObject:object] forKey:key];
         } else {
             
-            [dictionary setObject:[NSObject objectFromParseObject:object] forKey:key];
+            [dictionary setObject:object forKey:key];
         }
     }
     

@@ -40,6 +40,9 @@ NSString* const kNullValue = @"(null)";
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 +(NSObject*) objectFromParseObject:(PFObject*)parseObject {
     
+    
+    
+    
     const char* className = [[parseObject className] cStringUsingEncoding:NSASCIIStringEncoding];
     if(!objc_lookUpClass(className)) {
         
@@ -58,27 +61,42 @@ NSString* const kNullValue = @"(null)";
             continue;
         }
         
-        if ([value isKindOfClass:[NSArray class]]||
-            [value isKindOfClass:[NSMutableArray class]]) {
+        @try {
             
-            [object setValue:[NSArray arrayWithParseObjectArray:(NSArray*)value] forKey:key];
-        }  else if(([value isKindOfClass:[NSDictionary class]]||
-                    [value isKindOfClass:[NSMutableDictionary class]])&&
-                   ([(NSDictionary*)value objectForKey:kParseObjectClassKey])) {
-            
-            PFObject* parseObject = [PFObject objectWithParseDictionary:value];
-            [object setValue:[NSObject objectFromParseObject:parseObject] forKey:key];
-        
-        }  else if([value isKindOfClass:[NSDictionary class]]||
-                   [value isKindOfClass:[NSMutableDictionary class]]) {
-            
-            [object setValue:[NSDictionary dictionaryWithParseObjectDictionary:(NSDictionary*)value] forKey:key];
-        }  else if([value isKindOfClass:[PFObject class]]){
-            
-            [object setValue:[NSObject objectFromParseObject:value] forKey:key];
-        } else {
-            
-            [object setValue:value forKey:key];
+            if ([value isKindOfClass:[NSArray class]]||
+                [value isKindOfClass:[NSMutableArray class]]) {
+                
+                [object setValue:[NSArray arrayWithParseObjectArray:(NSArray*)value] forKey:key];
+            }  else if(([value isKindOfClass:[NSDictionary class]]||
+                        [value isKindOfClass:[NSMutableDictionary class]])&&
+                       ([(NSDictionary*)value objectForKey:kParseObjectClassKey])) {
+                
+                PFObject* parseObject = [PFObject objectWithParseDictionary:value];
+                NSObject* newObject = [NSObject objectFromParseObject:parseObject];
+                
+                if(newObject) {
+                    [object setValue:newObject forKey:key];
+                } else {
+                    [object setValue:[NSDictionary dictionaryWithParseObjectDictionary:value] forKey:key];
+                }
+                
+            }  else if([value isKindOfClass:[NSDictionary class]]||
+                       [value isKindOfClass:[NSMutableDictionary class]]) {
+                
+                [object setValue:[NSDictionary dictionaryWithParseObjectDictionary:(NSDictionary*)value] forKey:key];
+            }  else if([value isKindOfClass:[PFObject class]]){
+                
+                [object setValue:[NSObject objectFromParseObject:value] forKey:key];
+            } else {
+                
+                [object setValue:value forKey:key];
+            }
+        }
+        @catch (NSException* exception) {
+            NSLog(@"extParse_Exception:%@",[exception reason]);
+        }
+        @finally {
+            continue;
         }
     }
     
