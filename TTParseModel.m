@@ -23,6 +23,7 @@
     
     if(self=[super init]) {
         _query = [query retain];
+        _query.cachePolicy  = kPFCachePolicyNetworkOnly;
     }
     return self;
 }
