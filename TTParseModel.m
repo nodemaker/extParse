@@ -7,7 +7,6 @@
 //
 
 #import "TTParseModel.h"
-#import "NSArrayAdditions.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +84,7 @@
     _loadedTime = [[NSDate date] retain];    
     
     [_objects release];
-    _objects = [[NSArray arrayWithParseObjectArray:result] retain];
+    _objects = [result retain];
     
     [self didFinishLoad];     
 }

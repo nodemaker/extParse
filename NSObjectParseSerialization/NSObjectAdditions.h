@@ -18,7 +18,7 @@ extern NSString* const kNullValue;
 
 -(BOOL) isParseSerializable;
 -(NSDictionary*) parseSerializableDictionary;
--(void) syncParseObject;
+-(void) syncParseObject;https://dl.dropbox.com/u/23360122/iTunesArtwork.png
 
 /////SAVE//////
 /*!
