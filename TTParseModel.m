@@ -22,7 +22,7 @@
     
     if(self=[super init]) {
         _query = [query retain];
-        _query.cachePolicy  = kPFCachePolicyNetworkOnly;
+        _query.cachePolicy  = kPFCachePolicyNetworkElseCache;
     }
     return self;
 }
