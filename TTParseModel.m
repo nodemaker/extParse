@@ -30,6 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc {
     
+    TT_RELEASE_SAFELY(_objects);
     TT_RELEASE_SAFELY(_loadedTime);
     TT_RELEASE_SAFELY(_query);
     
@@ -66,12 +67,13 @@
     //To be implemented
     [self didCancelLoad];
 }
-
+    
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark Parse CallBackSelector
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)callbackWithResult:(NSArray*)result error:(NSError*)error {         
    
     _isLoading = NO;
@@ -88,5 +90,67 @@
     
     [self didFinishLoad];     
 }
+
+@end
+
+@implementation TTParseSearchModel
+@synthesize filteredObjects = _filteredObjects;
+@synthesize searchDelegate = _searchDelegate;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (id)initWithParseModel:(TTParseModel*)parseModel{
+    if(self=[super init]) {
+        
+        _parseModel = [parseModel retain];
+    }
+    return self;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+    
+    TT_RELEASE_SAFELY(_filteredObjects);
+    TT_RELEASE_SAFELY(_parseModel);
+    
+    [super dealloc];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more {
+    
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)search:(NSString*)text{
+    
+    TT_RELEASE_SAFELY(_filteredObjects);
+    if (text.length) {
+        NSMutableArray* filteredObjects = [NSMutableArray array];
+        for(PFObject* object in _parseModel.objects){
+            if([self.searchDelegate respondsToSelector:@selector(isObject:validForSearchQuery:)]){
+                if([self.searchDelegate isObject:object validForSearchQuery:text]){
+                    [filteredObjects addObject:object];
+                }
+            }
+        }
+        _filteredObjects = [[NSArray alloc] initWithArray:filteredObjects];
+        [self didFinishLoad];
+    } else {
+        _filteredObjects = [[NSArray alloc] init];
+        [self didChange];
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)isLoaded {
+    return YES;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)isLoading {
+    return NO;
+}
+
 
 @end

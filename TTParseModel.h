@@ -9,6 +9,7 @@
 #import <Parse/Parse.h>
 #import <Foundation/Foundation.h>
 
+@protocol TTParseModelSearchDelegate;
 /**
  * An implementation of TTModel which is built to work with Parse.
  */
@@ -20,11 +21,31 @@
     BOOL _isLoading;
 }
 
--(id) initWithQuery:(PFQuery*)query;
+- (id)initWithQuery:(PFQuery*)query;
+
 /**
  * Valid upon loading the Parse Model at least once. Represents the timestamp of the last time the parse model was loaded.
  */
 @property (nonatomic, retain) NSDate*   loadedTime;
 @property (nonatomic, readonly) PFQuery* query;
 @property (nonatomic, retain) NSArray* objects;
+
+@end
+
+@interface TTParseSearchModel : TTParseModel {
+    id<TTParseModelSearchDelegate> _searchDelegate;
+    TTParseModel* _parseModel;
+    NSArray* _filteredObjects;
+}
+
+- (id)initWithParseModel:(TTParseModel*)parseModel;
+- (void)search:(NSString*)text;
+
+@property (nonatomic, retain) NSArray* filteredObjects;
+@property (nonatomic, assign) id<TTParseModelSearchDelegate> searchDelegate;
+@end
+
+
+@protocol TTParseModelSearchDelegate <NSObject>
+-(BOOL)isObject:(PFObject*)object validForSearchQuery:(NSString*)query;
 @end
