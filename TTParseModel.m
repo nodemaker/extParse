@@ -86,7 +86,7 @@
     _loadedTime = [[NSDate date] retain];    
     
     [_objects release];
-    _objects = [result retain];
+    _objects = [[NSMutableArray arrayWithArray:result] retain];
     
     [self didFinishLoad];     
 }

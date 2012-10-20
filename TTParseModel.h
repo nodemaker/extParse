@@ -17,7 +17,7 @@
     
     NSDate* _loadedTime;
     PFQuery* _query;
-    NSArray* _objects;
+    NSMutableArray* _objects;
     BOOL _isLoading;
 }
 
@@ -28,7 +28,7 @@
  */
 @property (nonatomic, retain) NSDate*   loadedTime;
 @property (nonatomic, readonly) PFQuery* query;
-@property (nonatomic, retain) NSArray* objects;
+@property (nonatomic, retain) NSMutableArray* objects;
 
 @end
 
