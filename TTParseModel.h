@@ -19,9 +19,11 @@
     PFQuery* _query;
     NSMutableArray* _objects;
     BOOL _isLoading;
+    BOOL _alwaysLoading;
 }
 
 - (id)initWithQuery:(PFQuery*)query;
+-(id) initAsLoadingModel ;
 
 /**
  * Valid upon loading the Parse Model at least once. Represents the timestamp of the last time the parse model was loaded.

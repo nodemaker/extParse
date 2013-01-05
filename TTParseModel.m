@@ -23,6 +23,16 @@
     if(self=[super init]) {
         _query = [query retain];
         _query.cachePolicy  = kPFCachePolicyNetworkElseCache;
+        _alwaysLoading = NO;
+    }
+    return self;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(id) initAsLoadingModel {
+    
+    if(self=[super init]) {
+        _alwaysLoading = YES;
     }
     return self;
 }
@@ -45,18 +55,30 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)isLoaded {
+    if(_alwaysLoading){
+        return NO;
+    }
+    
     return !!_loadedTime;
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)isLoading {
+    if(_alwaysLoading){
+        return YES;
+    }
+    
     return _isLoading;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more {
  
+    if(_alwaysLoading){
+        return;
+    }
+    
     [self.query findObjectsInBackgroundWithTarget:self selector:@selector(callbackWithResult:error:)];
     _isLoading = YES;
     [self didStartLoad];
