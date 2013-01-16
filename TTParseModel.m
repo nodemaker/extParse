@@ -8,6 +8,8 @@
 
 #import "TTParseModel.h"
 
+const NSInteger kQueryLimit = 40;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +25,10 @@
     if(self=[super init]) {
         _query = [query retain];
         _query.cachePolicy  = kPFCachePolicyNetworkElseCache;
+        _query.limit = kQueryLimit;
         _alwaysLoading = NO;
+        _objects = nil;
+        _loadedTime = nil;
     }
     return self;
 }
@@ -104,10 +109,10 @@
         return;
     } 
     
-    [_loadedTime release];
+    TT_RELEASE_SAFELY(_loadedTime);
     _loadedTime = [[NSDate date] retain];    
     
-    [_objects release];
+    TT_RELEASE_SAFELY(_objects);
     _objects = [[NSMutableArray arrayWithArray:result] retain];
     
     [self didFinishLoad];     
