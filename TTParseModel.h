@@ -32,6 +32,7 @@
 @property (nonatomic, readonly) PFQuery* query;
 @property (nonatomic, retain) NSMutableArray* objects;
 
+@property (nonatomic, assign) NSInteger queryLimit;
 @end
 
 @interface TTParseSearchModel : TTParseModel {
