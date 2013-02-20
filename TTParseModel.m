@@ -23,7 +23,7 @@ const NSInteger kQueryLimit = 40;
 -(id) initWithQuery:(PFQuery*)query {
     
     if(self=[super init]) {
-        _query = [query retain];
+        _query = query;
         _query.cachePolicy  = kPFCachePolicyNetworkElseCache;
         _query.limit = kQueryLimit;
         _alwaysLoading = NO;
@@ -50,16 +50,6 @@ const NSInteger kQueryLimit = 40;
         _alwaysLoading = YES;
     }
     return self;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-    
-    TT_RELEASE_SAFELY(_objects);
-    TT_RELEASE_SAFELY(_loadedTime);
-    TT_RELEASE_SAFELY(_query);
-    
-    [super dealloc];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,11 +109,8 @@ const NSInteger kQueryLimit = 40;
         return;
     } 
     
-    TT_RELEASE_SAFELY(_loadedTime);
-    _loadedTime = [[NSDate date] retain];    
-    
-    TT_RELEASE_SAFELY(_objects);
-    _objects = [[NSMutableArray arrayWithArray:result] retain];
+    _loadedTime = [NSDate date];    
+    _objects = [NSMutableArray arrayWithArray:result];
     
     [self didFinishLoad];     
 }
@@ -138,18 +125,9 @@ const NSInteger kQueryLimit = 40;
 - (id)initWithParseModel:(TTParseModel*)parseModel{
     if(self=[super init]) {
         
-        _parseModel = [parseModel retain];
+        _parseModel = parseModel;
     }
     return self;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-    
-    TT_RELEASE_SAFELY(_filteredObjects);
-    TT_RELEASE_SAFELY(_parseModel);
-    
-    [super dealloc];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +138,7 @@ const NSInteger kQueryLimit = 40;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)search:(NSString*)text{
     
-    TT_RELEASE_SAFELY(_filteredObjects);
+    _filteredObjects = nil;
     if (text.length) {
         NSMutableArray* filteredObjects = [NSMutableArray array];
         for(PFObject* object in _parseModel.objects){

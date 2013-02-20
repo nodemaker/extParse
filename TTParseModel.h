@@ -28,15 +28,15 @@
 /**
  * Valid upon loading the Parse Model at least once. Represents the timestamp of the last time the parse model was loaded.
  */
-@property (nonatomic, retain) NSDate*   loadedTime;
+@property (nonatomic, strong) NSDate*   loadedTime;
 @property (nonatomic, readonly) PFQuery* query;
-@property (nonatomic, retain) NSMutableArray* objects;
+@property (nonatomic, strong) NSMutableArray* objects;
 
 @property (nonatomic, assign) NSInteger queryLimit;
 @end
 
 @interface TTParseSearchModel : TTParseModel {
-    id<TTParseModelSearchDelegate> _searchDelegate;
+    id<TTParseModelSearchDelegate> __weak _searchDelegate;
     TTParseModel* _parseModel;
     NSArray* _filteredObjects;
 }
@@ -44,8 +44,8 @@
 - (id)initWithParseModel:(TTParseModel*)parseModel;
 - (void)search:(NSString*)text;
 
-@property (nonatomic, retain) NSArray* filteredObjects;
-@property (nonatomic, assign) id<TTParseModelSearchDelegate> searchDelegate;
+@property (nonatomic, strong) NSArray* filteredObjects;
+@property (nonatomic, weak) id<TTParseModelSearchDelegate> searchDelegate;
 @end
 
 
