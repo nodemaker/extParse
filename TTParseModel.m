@@ -13,7 +13,10 @@ const NSInteger kQueryLimit = 40;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-@implementation TTParseModel
+@implementation TTParseModel {
+    BOOL _isLoading;
+    BOOL _alwaysLoading;
+}
 
 @synthesize loadedTime  = _loadedTime;
 @synthesize query = _query;
@@ -117,7 +120,9 @@ const NSInteger kQueryLimit = 40;
 
 @end
 
-@implementation TTParseSearchModel
+@implementation TTParseSearchModel{
+    __strong TTParseModel* _parseModel;
+}
 @synthesize filteredObjects = _filteredObjects;
 @synthesize searchDelegate = _searchDelegate;
 

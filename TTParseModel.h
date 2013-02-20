@@ -13,15 +13,7 @@
 /**
  * An implementation of TTModel which is built to work with Parse.
  */
-@interface TTParseModel : TTModel  {
-    
-    NSDate* _loadedTime;
-    PFQuery* _query;
-    NSMutableArray* _objects;
-    BOOL _isLoading;
-    BOOL _alwaysLoading;
-}
-
+@interface TTParseModel : TTModel  
 - (id)initWithQuery:(PFQuery*)query;
 -(id) initAsLoadingModel ;
 
@@ -29,21 +21,15 @@
  * Valid upon loading the Parse Model at least once. Represents the timestamp of the last time the parse model was loaded.
  */
 @property (nonatomic, strong) NSDate*   loadedTime;
-@property (nonatomic, readonly) PFQuery* query;
+@property (strong,nonatomic, readonly) PFQuery* query;
 @property (nonatomic, strong) NSMutableArray* objects;
 
 @property (nonatomic, assign) NSInteger queryLimit;
 @end
 
-@interface TTParseSearchModel : TTParseModel {
-    id<TTParseModelSearchDelegate> __weak _searchDelegate;
-    TTParseModel* _parseModel;
-    NSArray* _filteredObjects;
-}
-
+@interface TTParseSearchModel : TTParseModel 
 - (id)initWithParseModel:(TTParseModel*)parseModel;
 - (void)search:(NSString*)text;
-
 @property (nonatomic, strong) NSArray* filteredObjects;
 @property (nonatomic, weak) id<TTParseModelSearchDelegate> searchDelegate;
 @end
