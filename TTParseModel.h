@@ -21,7 +21,7 @@
  * Valid upon loading the Parse Model at least once. Represents the timestamp of the last time the parse model was loaded.
  */
 @property (nonatomic, strong) NSDate*   loadedTime;
-@property (strong,nonatomic, readonly) PFQuery* query;
+@property (strong, nonatomic, readonly) PFQuery* query;
 @property (nonatomic, strong) NSMutableArray* objects;
 
 @property (nonatomic, assign) NSInteger queryLimit;

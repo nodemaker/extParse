@@ -16,6 +16,7 @@ const NSInteger kQueryLimit = 40;
 @implementation TTParseModel {
     BOOL _isLoading;
     BOOL _alwaysLoading;
+    __strong PFQuery* _query;
 }
 
 @synthesize loadedTime  = _loadedTime;
