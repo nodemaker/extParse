@@ -16,7 +16,6 @@ const NSInteger kQueryLimit = 40;
 @implementation TTParseModel {
     BOOL _isLoading;
     BOOL _alwaysLoading;
-    __strong PFQuery* _query;
 }
 
 @synthesize loadedTime  = _loadedTime;
@@ -24,15 +23,21 @@ const NSInteger kQueryLimit = 40;
 @synthesize objects = _objects;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(id) initWithQuery:(PFQuery*)query {
-    
-    if(self=[super init]) {
-        _query = query;
-        _query.cachePolicy  = kPFCachePolicyNetworkElseCache;
-        _query.limit = kQueryLimit;
+-(id)init {
+    if(self = [super init]){
         _alwaysLoading = NO;
         _objects = nil;
         _loadedTime = nil;
+    }
+    return self;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(id) initWithQuery:(PFQuery*)query {
+    if(self=[self init]) {
+        _query = query;
+        _query.cachePolicy  = kPFCachePolicyNetworkElseCache;
+        _query.limit = kQueryLimit;
     }
     return self;
 }
@@ -84,7 +89,7 @@ const NSInteger kQueryLimit = 40;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more {
  
-    if(_alwaysLoading){
+    if(_alwaysLoading||!self.query){
         return;
     }
     
