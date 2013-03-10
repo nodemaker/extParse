@@ -15,7 +15,8 @@
  */
 @interface TTParseModel : TTModel  
 - (id)initWithQuery:(PFQuery*)query;
--(id) initAsLoadingModel ;
+- (id) initAsLoadingModel ;
+- (id) initAsErrorModel;
 
 /**
  * Valid upon loading the Parse Model at least once. Represents the timestamp of the last time the parse model was loaded.

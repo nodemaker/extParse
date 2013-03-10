@@ -16,6 +16,7 @@ const NSInteger kQueryLimit = 40;
 @implementation TTParseModel {
     BOOL _isLoading;
     BOOL _alwaysLoading;
+    BOOL _alwaysError;
 }
 
 @synthesize loadedTime  = _loadedTime;
@@ -26,6 +27,7 @@ const NSInteger kQueryLimit = 40;
 -(id)init {
     if(self = [super init]){
         _alwaysLoading = NO;
+        _alwaysError = NO;
         _objects = nil;
         _loadedTime = nil;
     }
@@ -62,6 +64,15 @@ const NSInteger kQueryLimit = 40;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+-(id) initAsErrorModel {
+    if(self=[super init]) {
+        _alwaysError = YES;
+    }
+    return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark TTModel
@@ -76,7 +87,6 @@ const NSInteger kQueryLimit = 40;
     return !!_loadedTime;
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)isLoading {
     if(_alwaysLoading){
@@ -89,6 +99,13 @@ const NSInteger kQueryLimit = 40;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more {
  
+    if(_alwaysError){
+        NSError* error = [NSError errorWithDomain:NSCocoaErrorDomain code:5000 userInfo:nil];
+        _loadedTime = [NSDate date];
+        _isLoading = NO;
+        [self didFailLoadWithError:error];
+    }
+    
     if(_alwaysLoading||!self.query){
         return;
     }
